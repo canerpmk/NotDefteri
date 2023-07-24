@@ -1,8 +1,10 @@
 package com.example.notdefteri.service;
 
 import com.example.notdefteri.model.Note;
+import com.example.notdefteri.repository.NoteRepository;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,46 +15,38 @@ import java.util.UUID;
 @Service
 @Builder
 public class NoteService {
-    private List<Note> noteList = new ArrayList<>();
+
+    @Autowired
+    private NoteRepository noteRepository;
 
     public Note getNoteById(UUID id) {
-        for (Note note : noteList) {
-            if (note.getId().equals(id)) {
-                return note;
-            }
-        }
-        return null;
+        return noteRepository.findById(id);
     }
 
     public List<Note> getAllNotes() {
-        return noteList;
+        return noteRepository.findAll();
     }
 
     public Note addNote(Note note) {
 
         note.setId(UUID.randomUUID());
-        noteList.add(note);
-        return note;
+
+
+        return noteRepository.save(note);
     }
 
     public Note updateNote(Note updatedNote) {
-        for (Note note : noteList) {
-            if (note.getId().equals(updatedNote.getId())) {
-                note.setTitle(updatedNote.getTitle());
-                note.setContent(updatedNote.getContent());
-                return note;
-            }
+        if (noteRepository.findById(updatedNote.getId()) == null) {
+            return null;
         }
-        return null;
+        return noteRepository.save(updatedNote);
+
     }
 
     public boolean deleteNoteById(UUID id) {
-        for (Note note : noteList) {
-            if (note.getId().equals(id)) {
-                noteList.remove(note);
-                return true;
-            }
+        if (noteRepository.deleteById(id)==false){
+            return false;
         }
-        return false;
+        return noteRepository.deleteById(id);
     }
 }
