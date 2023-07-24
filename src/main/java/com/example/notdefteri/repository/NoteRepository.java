@@ -1,37 +1,32 @@
 package com.example.notdefteri.repository;
 
-import com.example.notdefteri.model.Notes;
-import lombok.Builder;
-import lombok.Data;
+import com.example.notdefteri.model.Note;
 import org.springframework.stereotype.Repository;
 
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Repository
 public class NoteRepository {
 
-    private Map<String, Notes> noteMap = new HashMap<>();
 
-    public Notes findById(String id) {
+    private Map<UUID, Note> noteMap = new HashMap<>();
+
+    public Note findById(UUID id) {
         return noteMap.get(id);
     }
 
-    public List<Notes> findAll() {
+    public List<Note> findAll() {
         return new ArrayList<>(noteMap.values());
     }
 
-    public Notes save(Notes note) {
+    public Note save(Note note) {
         noteMap.put(note.getId(), note);
         return note;
     }
 
-    public boolean deleteById(String id) {
+    public boolean deleteById(UUID id) {
         return noteMap.remove(id) != null;
     }
 }

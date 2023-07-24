@@ -1,28 +1,26 @@
 package com.example.notdefteri.model;
 
-import lombok.Builder;
 import lombok.Data;
-import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Data
-public class Notes {
-    private String id;
+public class Note {
+    private UUID id;
     private String title;
     private String content;
 
 
-    public Notes(String id, String title, String content) {
+    public Note(UUID id, String title, String content) {
         this.id=id;
         this.title = title;
         this.content = content;
     }
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -40,5 +38,9 @@ public class Notes {
 
     public void setContent(String content) {
         this.content = content;
+    }
+    @Override
+    public String toString() {
+        return "Notes [id=" + id + ", title=" + title + ", content=" + content +  "]";
     }
 }

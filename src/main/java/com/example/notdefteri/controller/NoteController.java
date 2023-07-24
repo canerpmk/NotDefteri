@@ -1,6 +1,6 @@
 package com.example.notdefteri.controller;
 
-import com.example.notdefteri.model.Notes;
+import com.example.notdefteri.model.Note;
 import com.example.notdefteri.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +19,13 @@ public class NoteController {
         this.noteService = noteService;
     }
     @GetMapping
-    public List<Notes> getAllNotes() {
-        return noteService.getAllNotes();
+    public ResponseEntity<List<Note>> getAllNotes() {
+        return ResponseEntity.status(HttpStatus.CREATED).body(noteService.getAllNotes());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Notes> getNoteById(@PathVariable UUID id) {
-        Notes note = noteService.getNoteById(id);
+    public ResponseEntity<Note> getNoteById(@PathVariable UUID id) {
+        Note note = noteService.getNoteById(id);
         if (note != null) {
             return ResponseEntity.ok(note);
         } else {
@@ -33,15 +33,15 @@ public class NoteController {
         }
     }
     @PostMapping
-    public ResponseEntity<Notes> createNote(@RequestBody Notes note) {
-        Notes createdNote = noteService.addNote(note);
+    public ResponseEntity<Note> createNote(@RequestBody Note note) {
+        Note createdNote = noteService.addNote(note);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Notes> updateNote(@PathVariable UUID id, @RequestBody Notes updatedNote) {
-        updatedNote.setId(String.valueOf(id));
-        Notes updatedNoteResult = noteService.updateNote(updatedNote);
+    public ResponseEntity<Note> updateNote(@PathVariable UUID id, @RequestBody Note updatedNote) {
+        updatedNote.setId(id);
+        Note updatedNoteResult = noteService.updateNote(updatedNote);
         if (updatedNoteResult != null) {
             return ResponseEntity.ok(updatedNoteResult);
         } else {
@@ -50,7 +50,7 @@ public class NoteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNote(@PathVariable String id) {
+    public ResponseEntity<Void> deleteNote(@PathVariable UUID id) {
         boolean isDeleted = noteService.deleteNoteById(id);
         if (isDeleted) {
             return ResponseEntity.ok().build();

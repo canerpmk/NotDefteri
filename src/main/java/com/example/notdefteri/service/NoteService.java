@@ -1,10 +1,8 @@
 package com.example.notdefteri.service;
 
-import com.example.notdefteri.model.Notes;
-import com.example.notdefteri.repository.NoteRepository;
+import com.example.notdefteri.model.Note;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,9 +13,10 @@ import java.util.UUID;
 @Service
 @Builder
 public class NoteService {
-    private List<Notes> noteList = new ArrayList<>();
-    public Notes getNoteById(UUID id) {
-        for (Notes note : noteList) {
+    private List<Note> noteList = new ArrayList<>();
+
+    public Note getNoteById(UUID id) {
+        for (Note note : noteList) {
             if (note.getId().equals(id)) {
                 return note;
             }
@@ -25,19 +24,19 @@ public class NoteService {
         return null;
     }
 
-    public List<Notes> getAllNotes() {
+    public List<Note> getAllNotes() {
         return noteList;
     }
 
-    public Notes addNote(Notes note) {
-        String randomId = UUID.randomUUID().toString();
-        note.setId(randomId);
+    public Note addNote(Note note) {
+
+        note.setId(UUID.randomUUID());
         noteList.add(note);
         return note;
     }
 
-    public Notes updateNote(Notes updatedNote) {
-        for (Notes note : noteList) {
+    public Note updateNote(Note updatedNote) {
+        for (Note note : noteList) {
             if (note.getId().equals(updatedNote.getId())) {
                 note.setTitle(updatedNote.getTitle());
                 note.setContent(updatedNote.getContent());
@@ -47,8 +46,8 @@ public class NoteService {
         return null;
     }
 
-    public boolean deleteNoteById(String id) {
-        for (Notes note : noteList) {
+    public boolean deleteNoteById(UUID id) {
+        for (Note note : noteList) {
             if (note.getId().equals(id)) {
                 noteList.remove(note);
                 return true;
